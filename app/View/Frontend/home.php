@@ -2,7 +2,7 @@
 
 use App\Core\Helper\AuthHelper;
 use App\Entity\Post;
-
+use App\Entity\User;
 ?>
 
 <?php if (AuthHelper::isLoggedIn()) : ?>
@@ -26,5 +26,12 @@ use App\Entity\Post;
         <li><a href="/show/<?= $post->getId(); ?>-test"><?= $post->getTitle(); ?></a></li>
     <?php endforeach; ?>
 </ul>
+
+<ol>fghfh
+    <?php /** @var $users User[] */
+    foreach ($users as $user) : ?>
+        <li><a href="/show/<?= $user->getId(); ?>-test"><?= $user->getEmail(); ?></a></li>
+    <?php endforeach; ?>
+</ol>
 
 
