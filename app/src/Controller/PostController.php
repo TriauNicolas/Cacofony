@@ -20,7 +20,7 @@ class PostController extends BaseController
     {
         $posts = $postManager->findAll();
         $users = $userManager->findAll();
-        $users = $userManager->insertUser();
+        // $users = $userManager->insertUser();
         $this->render('Frontend/home', [
             'posts' => $posts,
             'users' => $users,

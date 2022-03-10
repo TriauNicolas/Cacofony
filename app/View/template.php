@@ -41,9 +41,20 @@
         <a class="nav-link disabled" href="#">Disabled</a>
       </li>
     </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    <form class="form-inline my-2 my-lg-0" action="/logout">
+      <?php if (!empty($_SESSION['isAdmin'])) {
+                echo " ".$_SESSION['login'] ." ";
+            } else {
+                echo "";
+            }?>
+      <?php if (!empty($_SESSION['isAdmin'])) {
+                echo 'bravo';
+                echo '<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">';
+            } else {
+                echo 'failed';
+            }?>
+      
+      <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Déconnexion</button>
     </form>
   </div>
 </nav>       

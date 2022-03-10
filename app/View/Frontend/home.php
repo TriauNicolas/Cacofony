@@ -27,7 +27,7 @@ use App\Entity\User;
     <?php endforeach; ?>
 </ul>
 
-<ol>fghfh
+<ol>
     <?php /** @var $users User[] */
     foreach ($users as $user) : ?>
         <li><a href="/show/<?= $user->getId(); ?>-test"><?= $user->getEmail(); ?></a></li>
