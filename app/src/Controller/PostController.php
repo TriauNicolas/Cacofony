@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Core\BaseClasse\BaseController;
+use App\Manager\CommentaryManager;
 use App\Manager\PostManager;
+use App\Manager\UserManager;
 use App\Service\ExampleService;
 
 class PostController extends BaseController
@@ -11,14 +13,18 @@ class PostController extends BaseController
     /**
      * @Route(path="/", name="homePage")
      * @param PostManager $postManager
+     * @param UserManager $userManager
      * @param ExampleService $service
      * @return void
      */
-    public function getHome(PostManager $postManager, ExampleService $service)
+    public function getHome(PostManager $postManager, UserManager $userManager, ExampleService $service)
     {
         $posts = $postManager->findAll();
+        $users = $userManager->findAll();
+        // $users = $userManager->insertUser();
         $this->render('Frontend/home', [
             'posts' => $posts,
+            'users' => $users,
             'strongText' => $service->getStrong('je suis du texte qui vient d\'un service en autowiring'),
             'appSecret' => $service->getAppSecret()
         ], 'Le titre de la page');
@@ -31,13 +37,41 @@ class PostController extends BaseController
      * @param PostManager $postManager
      * @return void
      */
-    public function getShow(int $id, string $truc, PostManager $postManager)
+    public function getShow(int $id, string $truc, PostManager $postManager, CommentaryManager $commentaryManager)
     {
+        /** @var Post $post */
         $post = $postManager->findOneBy('id', $id);
+
         if (!$post) {
             $this->HTTPResponse->redirect('/');
         }
-        $this->render('Frontend/showOne', ['post' => $post], $truc);
+
+        $commentaries = $commentaryManager->getCommentariesByPostId($post->getId());
+        $this->render('Frontend/showOne', ['post' => $post, 'commentaries' => $commentaries ], $post->getTitle());
+    }
+
+        /**
+     * @Route(path="/createPost", name="createPost")
+     * @param int $id
+     * @param string $truc
+     * @param PostManager $postManager
+     * @return void
+     */
+    public function getPostPage()
+    {
+        $this->render('Frontend/createPost', [], "Make your Post !");
+    }
+
+    /**
+     * @Route(path="/post/{id}/create")
+     */
+    public function postCreate(PostManager $postManager){
+        return $postManager->postCreate(
+        1,
+        $_POST['title'],
+        $_POST['image'],
+        $_POST['content']
+        );
     }
 
     /**

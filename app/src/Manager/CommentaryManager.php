@@ -1,0 +1,53 @@
+<?php
+
+namespace App\Manager;
+
+use App\Entity\Commentary;
+use App\Core\BaseClasse\BaseManager;
+use DateTime;
+
+class CommentaryManager extends BaseManager
+{
+  public function getCommentariesByPostId(int $articleId)
+  {
+    $statement = $this->pdo->prepare("
+        SELECT Commentaries.id, articleId, content, createdAt, Commentaries.userId, users.lastname
+        FROM Commentaries
+        LEFT JOIN users on users.id = Commentaries.userId
+        WHERE Commentaries.articleId = $articleId
+        ORDER BY createdAt DESC
+    ");
+    $statement->execute();
+    $statement->setFetchMode(\PDO::FETCH_ASSOC);
+    
+    $results = $statement->fetchAll();
+
+    return $results ?? [];
+  }
+
+  // public function getUserById(int $userId)
+  // {
+  //   $statement = $this->pdo->prepare("
+  //       SELECT lastname
+  //       FROM usar
+  //       WHERE usar.id = $userId
+  //   ");
+
+  //   $statement->execute();
+  //   $statement->setFetchMode(\PDO::FETCH_ASSOC);
+
+  //   $results = $statement->fetch();
+
+  //   return $results ?? '';
+  // }
+  
+  public function postCommentary(int $articleId, int $userId, string $content)
+
+    {
+      $query = "INSERT INTO `Commentaries`(`articleId`, `userId`, `content`) VALUES ($articleId, $userId, '$content')";
+      $stmnt = $this->pdo->prepare($query);
+      $stmnt->execute();
+      
+    }
+
+}
